@@ -18,7 +18,9 @@ class MyApp extends StatelessWidget {
 }
 
 class ListPage extends StatelessWidget {
-  const ListPage({super.key});
+  ListPage({super.key});
+
+  GlobalKey<ChildWidgetState> childKey = GlobalKey();
 
   @override
   Widget build(BuildContext context) {
@@ -27,41 +29,63 @@ class ListPage extends StatelessWidget {
       body: Column(
         children: [
           ElevatedButton(
-              onPressed: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => DetailPage()));
-              },
-              child: Text("상세 이동하기")),
-          Expanded(
-            child: Consumer(
-              builder: (context, ref, child) {
-                ListModel? model = ref.watch(listProvider);
-
-                if (model == null) {
-                  return CircularProgressIndicator();
-                } else {
-                  return Column(
-                    children: [
-                      ElevatedButton(
-                          onPressed: () {
-                            ref.read(listProvider.notifier).add();
-                          },
-                          child: Text("댓글추가")),
-                      Text("${model.title}"),
-                      Expanded(
-                        child: ListView.builder(
-                          itemCount: 3,
-                          itemBuilder: (context, index) =>
-                              ListTile(title: Text("${model.comments[index]}")),
-                        ),
-                      ),
-                    ],
-                  );
-                }
-              },
-            ),
-          )
+            onPressed: () {
+              childKey.currentState!.hello();
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => DetailPage()));
+            },
+            child: Text("상세 이동하기"),
+          ),
+          ChildWidget(key: childKey),
         ],
+      ),
+    );
+  }
+}
+
+class ChildWidget extends StatefulWidget {
+  const ChildWidget({
+    super.key,
+  });
+
+  @override
+  State<ChildWidget> createState() => ChildWidgetState();
+}
+
+class ChildWidgetState extends State<ChildWidget> {
+  void hello() {
+    print("hello");
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      child: Consumer(
+        builder: (context, ref, child) {
+          ListModel? model = ref.watch(listProvider);
+
+          if (model == null) {
+            return CircularProgressIndicator();
+          } else {
+            return Column(
+              children: [
+                ElevatedButton(
+                    onPressed: () {
+                      ref.read(listProvider.notifier).add();
+                    },
+                    child: Text("댓글추가")),
+                Text("${model.title}"),
+                Expanded(
+                  child: ListView.builder(
+                    itemCount: 3,
+                    itemBuilder: (context, index) =>
+                        ListTile(title: Text("${model.comments[index]}")),
+                  ),
+                ),
+              ],
+            );
+          }
+        },
       ),
     );
   }
