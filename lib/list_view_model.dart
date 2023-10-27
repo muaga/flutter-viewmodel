@@ -2,6 +2,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test2/post_repository.dart';
 
+// 뷰모델 관리
 class ListModel {
   String title;
   List<String> comments;
