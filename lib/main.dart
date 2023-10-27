@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_test2/detail_view_model.dart';
 import 'package:flutter_test2/list_view_model.dart';
 
 void main() {
@@ -51,7 +50,7 @@ class ListPage extends StatelessWidget {
                       Text("${model.title}"),
                       Expanded(
                         child: ListView.builder(
-                          itemCount: model.comments.length,
+                          itemCount: 3,
                           itemBuilder: (context, index) =>
                               ListTile(title: Text("${model.comments[index]}")),
                         ),
@@ -85,7 +84,7 @@ class DetailPage extends StatelessWidget {
           Expanded(
             child: Consumer(
               builder: (context, ref, child) {
-                DetailModel? model = ref.watch(detailProvider);
+                ListModel? model = ref.watch(listProvider);
 
                 if (model == null) {
                   return CircularProgressIndicator();
@@ -94,7 +93,7 @@ class DetailPage extends StatelessWidget {
                     children: [
                       ElevatedButton(
                           onPressed: () {
-                            ref.read(detailProvider.notifier).add();
+                            ref.read(listProvider.notifier).add();
                           },
                           child: Text("댓글추가")),
                       Expanded(

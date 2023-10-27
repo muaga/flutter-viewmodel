@@ -27,23 +27,8 @@ class ListViewModel extends StateNotifier<ListModel?> {
   Future<void> add() async {
     String newComment = await PostRepository().save();
     ListModel model = state!;
-    // 1,2,3
-    model.comments.removeAt(0); // 2,3
-    model.comments = [...model.comments, newComment]; // 2,3,4
+    model.comments = [newComment, ...model.comments]; // 1,2,3,4
     state = ListModel.copy(model);
-
-    // detailViewModel에는 알림을 해줄 필요가 없다 (상세보기할때, 다시 다운받을거니까)
-  }
-
-  // 통신이 필요 없다.
-  Future<void> detailNotify(String newComment) async {
-    ListModel model = state!;
-    // 1,2,3
-    model.comments.removeAt(0); // 2,3
-    model.comments = [...model.comments, newComment]; // 2,3,4
-    state = ListModel.copy(model);
-
-    // detailViewModel에는 알림을 해줄 필요가 없다 (상세보기할때, 다시 다운받을거니까)
   }
 }
 
